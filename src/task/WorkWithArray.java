@@ -3,7 +3,7 @@ package task;
 public class WorkWithArray implements Runnable {
 	
 	private int[] arr;
-	int sumOfPortionElements;
+	private int sumOfPortionElements;
 	private int firstElementIndex;
 	private int lastElementIndex;
 			
@@ -17,24 +17,15 @@ public class WorkWithArray implements Runnable {
 	public int getSumOfPortionElements() {
 		return sumOfPortionElements;
 	}
-
-	public int CalculateSumOfElements(int[] arr, int firstElementIndex, int lastElementIndex) {
-		
-		int sumOfElements = 0;
-		
-		for (int i = firstElementIndex; i <= lastElementIndex; i++) {
-			sumOfElements += arr[i];
-		}
-				
-		return sumOfElements;
-				
-	}
-
+	
 	@Override
 	public void run() {
-	
+					
+		for (int i = firstElementIndex; i <= lastElementIndex; i++) {
+			sumOfPortionElements += arr[i];
+		}
+		
 		Thread thread = Thread.currentThread();
-		sumOfPortionElements = CalculateSumOfElements(arr, firstElementIndex, lastElementIndex);
 		System.out.println(thread.getName() + " " + sumOfPortionElements);
 				
 	}

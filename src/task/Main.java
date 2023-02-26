@@ -8,14 +8,14 @@ public class Main {
 		long endTime;
 		long timeElapsed;
 							
-		int[] array = new int[10000000];
-		int numberOfElementsInPortion = array.length / 4;
-		int elementsInPortionCounter = 0;
-		
-		Thread[] threads = new Thread[4];
-		int threadCounter = 0;
-		
-		WorkWithArray[] worksWithArrays = new WorkWithArray[4];
+		int[] array = new int[100000000];
+		int numberOfThreads = 4;
+		int numberOfElementsInPortion = array.length / numberOfThreads;
+		int firstElementIndex = 0;
+				
+		Thread[] threads = new Thread[numberOfThreads];
+				
+		WorkWithArray[] worksWithArrays = new WorkWithArray[numberOfThreads];
 		int sumOfArrayElements = 0;
 				
 		for (int i = 0; i < array.length; i++) {
@@ -41,17 +41,16 @@ public class Main {
 		// Multi threads algorithm
 		startTime = System.nanoTime();
 		
-		for (int i = 0; i < array.length; i++) {
-									
-			elementsInPortionCounter += 1;
+		for (int i = 0; i < numberOfThreads; i++) {
 			
-			if (elementsInPortionCounter == numberOfElementsInPortion) {
-				worksWithArrays[threadCounter] = new WorkWithArray(array, i - numberOfElementsInPortion + 1, i);
-				threads[threadCounter] = new Thread(worksWithArrays[threadCounter]);
-				threads[threadCounter].start();
-				threadCounter += 1;
-				elementsInPortionCounter = 0;
-			}
+			WorkWithArray wwa = new WorkWithArray(array, firstElementIndex, firstElementIndex + numberOfElementsInPortion - 1);
+			Thread thr = new Thread(wwa);
+			thr.start();
+			
+			worksWithArrays[i] = wwa;
+			threads[i] = thr;
+			
+			firstElementIndex += numberOfElementsInPortion; 
 			
 		}
 		
@@ -66,7 +65,7 @@ public class Main {
 		for (int i = 0; i < worksWithArrays.length; i++) {
 			sumOfArrayElements += worksWithArrays[i].getSumOfPortionElements();
 		}
-		
+				
 		System.out.println();
 		System.out.println("Sum of array elements: " + sumOfArrayElements);
 
